@@ -1,0 +1,24 @@
+Q1.
+import pandas as pd
+import matplotlib.pyplot as plt
+vehicles = pd.DataFrame({
+    "Fuel_Efficiency": [22, 20, 18, 21, 4],  # 4 is an outlier
+    "Engine_Power": [90, 110, 130, 105, 500], # 500 is an outlier
+    "Vehicle_Weight": [1000, 1200, 1350, 1150, 1500],
+    "Engine_Size": [1.0, 1.2, 1.5, 1.3, 2.0],
+    "Acceleration": [12, 11, 10, 11.5, 8]
+})
+fig, axes = plt.subplots(1, 2, figsize=(9, 4))
+axes[0].boxplot(vehicles["Fuel_Efficiency"])
+axes[0].set_title("Fuel Efficiency")
+axes[1].boxplot(vehicles["Engine_Power"])
+axes[1].set_title("Engine Power")
+plt.tight_layout()
+plt.show()
+for col in ["Fuel_Efficiency", "Engine_Power"]:
+    q1, q3 = vehicles[col].quantile([0.25, 0.75])
+    iqr = q3 - q1
+    out = vehicles[(vehicles[col] < q1 - 1.5 * iqr) |
+                   (vehicles[col] > q3 + 1.5 * iqr)]
+    print(f"Outliers in {col}:")
+    print(out[[col]])
